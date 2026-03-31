@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>VRM Viewer Next</title>
+  <link rel="stylesheet" href="./assets/styles.css">
+  <link rel="icon" href="./assets/favicon.ico">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+        "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3/lib/three-vrm.module.min.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <main class="stage-shell">
+      <div id="icon-stack" class="icon-stack">
+        <button id="info-toggle-button" class="icon-button" type="button" aria-label="Show model info" data-i18n-aria-label="aria.showModelInfo">
+          <span class="icon-glyph icon-glyph-info" aria-hidden="true">!</span>
+        </button>
+        <a id="github-link-button" class="icon-button" href="https://github.com/Iskongkongyo" target="_blank" rel="noopener noreferrer" aria-label="Open GitHub" data-i18n-aria-label="aria.openGithub">
+          <svg class="icon-glyph icon-glyph-github" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.59 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.88-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.9 1.58 2.35 1.13 2.92.86.09-.67.35-1.13.64-1.39-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.74-.1-.26-.45-1.3.1-2.72 0 0 .85-.28 2.77 1.05A9.35 9.35 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.91-1.33 2.76-1.05 2.76-1.05.55 1.42.2 2.46.1 2.72.64.71 1.03 1.62 1.03 2.74 0 3.94-2.34 4.81-4.57 5.06.36.32.68.96.68 1.94 0 1.4-.01 2.53-.01 2.88 0 .27.18.59.69.49A10.27 10.27 0 0 0 22 12.25C22 6.59 17.52 2 12 2Z"></path>
+          </svg>
+        </a>
+        <button id="photo-capture-button" class="icon-button" type="button" aria-label="Take photo" data-i18n-aria-label="aria.takePhoto">
+          <svg class="icon-glyph icon-glyph-camera" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4.5 7.5h3l1.2-2h6.6l1.2 2h3a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17V9a1.5 1.5 0 0 1 1.5-1.5Z"></path>
+            <circle cx="12" cy="13" r="3.5"></circle>
+          </svg>
+        </button>
+        <button id="chrome-toggle-button" class="icon-button" type="button" aria-label="Hide interface" data-i18n-aria-label="aria.hideInterface">
+          <svg class="icon-glyph icon-glyph-eye" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M1.5 12S5.5 5.5 12 5.5 22.5 12 22.5 12 18.5 18.5 12 18.5 1.5 12 1.5 12Z"></path>
+            <circle cx="12" cy="12" r="3.2"></circle>
+          </svg>
+        </button>
+      </div>
+
+      <section id="info-card" class="info-card" hidden>
+        <dl class="model-info-list compact">
+          <div><dt data-i18n="field.status">Status</dt><dd data-model-field="status">Ready</dd></div>
+          <div><dt data-i18n="field.title">Title</dt><dd data-model-field="title">-</dd></div>
+          <div><dt data-i18n="field.author">Author</dt><dd data-model-field="author">-</dd></div>
+          <div><dt data-i18n="field.version">Format</dt><dd data-model-field="version">-</dd></div>
+          <div><dt data-i18n="field.avatarPermission">Avatar Permission</dt><dd data-model-field="avatarPermission">-</dd></div>
+          <div><dt data-i18n="field.violentUsage">Violence</dt><dd data-model-field="violentUsage">-</dd></div>
+          <div><dt data-i18n="field.sexualUsage">Sexual</dt><dd data-model-field="sexualUsage">-</dd></div>
+          <div><dt data-i18n="field.commercialUsage">Commercial</dt><dd data-model-field="commercialUsage">-</dd></div>
+          <div><dt data-i18n="field.creditNotation">Credit Notation</dt><dd data-model-field="creditNotation">-</dd></div>
+          <div><dt data-i18n="field.redistribution">Redistribution</dt><dd data-model-field="redistribution">-</dd></div>
+          <div><dt data-i18n="field.modification">Modification</dt><dd data-model-field="modification">-</dd></div>
+          <div><dt data-i18n="field.contact">Contact</dt><dd data-model-field="contact">-</dd></div>
+          <div><dt data-i18n="field.reference">Reference</dt><dd data-model-field="reference">-</dd></div>
+          <div><dt data-i18n="field.license">License</dt><dd data-model-field="license">-</dd></div>
+          <div><dt data-i18n="field.otherPermissionUrl">Other Permission URL</dt><dd data-model-field="otherPermissionUrl">-</dd></div>
+          <div><dt data-i18n="field.otherLicenseUrl">Other License URL</dt><dd data-model-field="otherLicenseUrl">-</dd></div>
+        </dl>
+      </section>
+
+      <section id="panel-card" class="panel-card is-collapsed">
+        <div class="panel-head">
+          <h1 id="panel-title" class="panel-title" data-i18n="panel.default">Panel</h1>
+        </div>
+
+        <div class="panel-body">
+          <section class="panel-view" data-panel="emotion">
+            <h2 data-i18n="panel.emotion">Emotion</h2>
+            <div id="emotion-controls" class="slider-group">
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="emotion.joy">Joy</span> : <output id="emotion-joy-value">0</output></span>
+                <input id="emotion-joy" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="emotion.angry">Angry</span> : <output id="emotion-angry-value">0</output></span>
+                <input id="emotion-angry" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="emotion.sorrow">Sorrow</span> : <output id="emotion-sorrow-value">0</output></span>
+                <input id="emotion-sorrow" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="emotion.fun">Fun</span> : <output id="emotion-fun-value">0</output></span>
+                <input id="emotion-fun" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+            </div>
+          </section>
+
+          <section class="panel-view" data-panel="face">
+            <h2 data-i18n="panel.face">Face</h2>
+            <div class="toggle-group">
+              <label class="toggle-row">
+                <span class="toggle-label" data-i18n="face.lookAtCamera">Look At Camera</span><span class="toggle-label"> :</span>
+                <span class="switch">
+                  <input id="face-look-at-toggle" type="checkbox" checked>
+                  <span class="switch-ui"></span>
+                </span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-label" data-i18n="face.autoBlink">Auto Blink</span><span class="toggle-label"> :</span>
+                <span class="switch">
+                  <input id="face-auto-blink-toggle" type="checkbox" checked>
+                  <span class="switch-ui"></span>
+                </span>
+              </label>
+            </div>
+
+            <div id="face-controls" class="slider-group">
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="face.blink">Blink</span> : <output id="face-blink-value">0</output></span>
+                <input id="face-blink" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="face.blinkRight">Blink R</span> : <output id="face-blink-right-value">0</output></span>
+                <input id="face-blink-right" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="face.blinkLeft">Blink L</span> : <output id="face-blink-left-value">0</output></span>
+                <input id="face-blink-left" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="face.aa">A</span> : <output id="face-aa-value">0</output></span>
+                <input id="face-aa" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="face.ih">I</span> : <output id="face-ih-value">0</output></span>
+                <input id="face-ih" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="face.ou">U</span> : <output id="face-ou-value">0</output></span>
+                <input id="face-ou" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="face.ee">E</span> : <output id="face-ee-value">0</output></span>
+                <input id="face-ee" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+              <label class="slider-row">
+                <span class="slider-label"><span data-i18n="face.oh">O</span> : <output id="face-oh-value">0</output></span>
+                <input id="face-oh" class="range-slider" type="range" min="0" max="1" step="0.01" value="0">
+              </label>
+            </div>
+          </section>
+
+          <section class="panel-view" data-panel="pose">
+            <h2 data-i18n="panel.pose">Pose</h2>
+            <div class="pose-panel">
+              <div id="pose-list" class="pose-list"></div>
+
+              <div class="pose-footer">
+                <div id="pose-editor-shell" class="pose-editor-shell" hidden>
+                  <div class="pose-input-row">
+                    <input id="pose-name-input" class="pose-name-input" type="text" placeholder="Enter pose name..." data-i18n-placeholder="pose.placeholder">
+                  </div>
+                  <div class="pose-actions-row">
+                    <button id="pose-save-button" class="pose-tool-button" type="button" aria-label="Save pose" data-i18n-aria-label="pose.save">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 3h11l3 3v15H5z"></path>
+                        <path d="M8 3v6h8V3"></path>
+                        <path d="M9 21v-7h6v7"></path>
+                      </svg>
+                    </button>
+                    <button id="pose-bone-button" class="pose-tool-button" type="button" aria-label="Edit bones" data-i18n-aria-label="pose.editBones">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6 9a2.5 2.5 0 1 1 2.2-3.7h5.6A2.5 2.5 0 1 1 17 9a2.5 2.5 0 0 1-3.2-1.2H8.2A2.5 2.5 0 0 1 6 9Z"></path>
+                        <path d="M7.8 16.2h8.4"></path>
+                        <path d="M6 19a2.5 2.5 0 1 1 2.2-3.8h7.6A2.5 2.5 0 1 1 18 19a2.5 2.5 0 0 1-2.2-1.3H8.2A2.5 2.5 0 0 1 6 19Z"></path>
+                      </svg>
+                    </button>
+                    <button id="pose-move-button" class="pose-tool-button" type="button" aria-label="Move model" data-i18n-aria-label="pose.moveModel">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 3v18"></path>
+                        <path d="M12 3l-3 3"></path>
+                        <path d="M12 3l3 3"></path>
+                        <path d="M12 21l-3-3"></path>
+                        <path d="M12 21l3-3"></path>
+                        <path d="M3 12h18"></path>
+                        <path d="M3 12l3-3"></path>
+                        <path d="M3 12l3 3"></path>
+                        <path d="M21 12l-3-3"></path>
+                        <path d="M21 12l-3 3"></path>
+                      </svg>
+                    </button>
+                    <button id="pose-close-edit-button" class="pose-tool-button" type="button" aria-label="Close pose editor" data-i18n-aria-label="pose.closeEditor">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="8.5"></circle>
+                        <path d="M9 9l6 6"></path>
+                        <path d="M15 9l-6 6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div id="pose-add-shell" class="pose-add-shell">
+                  <button id="pose-add-button" class="pose-add-button" type="button" aria-label="Add pose" data-i18n-aria-label="pose.add">+</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel-view" data-panel="model">
+            <h2 data-i18n="panel.model">Model</h2>
+            <div class="action-stack model-actions">
+              <label class="file-picker">
+                <input id="file-input" type="file" accept=".vrm,model/gltf-binary,application/octet-stream">
+                <span data-i18n="model.selectFile">Select VRM File</span>
+              </label>
+              <button id="load-sample-button" class="ghost-button text-action" type="button" data-i18n="model.showDefaultModel">Show Default Model</button>
+            </div>
+
+            <dl class="model-info-list">
+              <div><dt data-i18n="field.status">Status</dt><dd data-model-field="status">Ready</dd></div>
+            </dl>
+          </section>
+
+          <section class="panel-view" data-panel="download">
+            <h2 data-i18n="panel.download">Download</h2>
+            <p class="panel-copy" data-i18n="download.copy">Paste a `hub.vroid.com` link. The local backend will deobfuscate it, then this viewer will preview and expose the VRM file.</p>
+
+            <form id="download-form" class="download-form">
+              <input id="download-url-input" class="text-input" type="url" placeholder="https://hub.vroid.com/characters/..." autocomplete="off" data-i18n-placeholder="download.placeholder">
+              <button id="download-submit-button" class="primary-button" type="submit" data-i18n="download.fetch">Fetch VRM</button>
+            </form>
+
+            <p id="download-status" class="status-copy" data-i18n="download.waiting">Waiting for a VRoid Hub link.</p>
+
+            <div id="download-result" class="result-box" hidden>
+              <p class="result-label" data-i18n="download.generatedModel">Generated model</p>
+              <p id="download-result-url" class="result-url"></p>
+              <div class="result-actions">
+                <button id="download-preview-button" class="ghost-button" type="button" data-i18n="download.preview">Preview</button>
+                <a id="download-file-link" class="ghost-button link-button" href="#" target="_blank" rel="noopener noreferrer" data-i18n="download.downloadVrm">Download VRM</a>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel-view" data-panel="option">
+            <h2 data-i18n="panel.option">Option</h2>
+            <div class="toggle-group">
+              <label class="toggle-row">
+                <span class="toggle-label" data-i18n="option.idleMotion">Idle Motion</span><span class="toggle-label"> :</span>
+                <span class="switch">
+                  <input id="option-idle-toggle" type="checkbox" checked>
+                  <span class="switch-ui"></span>
+                </span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-label" data-i18n="option.grid">Grid</span><span class="toggle-label"> :</span>
+                <span class="switch">
+                  <input id="option-grid-toggle" type="checkbox" checked>
+                  <span class="switch-ui"></span>
+                </span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-label" data-i18n="option.axis">XYZ Axis</span><span class="toggle-label"> :</span>
+                <span class="switch">
+                  <input id="option-axis-toggle" type="checkbox" checked>
+                  <span class="switch-ui"></span>
+                </span>
+              </label>
+            </div>
+            <div class="action-stack compact">
+              <button id="reset-camera-button" class="ghost-button" type="button" data-i18n="option.resetCamera">Reset Camera</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+       <section id="download-consent-dialog" class="dialog-backdrop" hidden>
+        <div class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="download-consent-title">
+          <h2 id="download-consent-title" class="dialog-title" data-i18n="download.noticeTitle">Download Notice</h2>
+          <p class="dialog-copy" data-i18n="download.noticeBody">Downloaded models are provided for educational and research use only.</p>
+          <div class="dialog-actions">
+            <button id="download-consent-reject-button" class="ghost-button" type="button" data-i18n="download.noticeReject">Decline</button>
+            <button id="download-consent-agree-button" class="primary-button" type="button" data-i18n="download.noticeAgree">Agree</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="drop-zone" class="stage-view">
+        <div class="drop-copy">
+          <p class="drop-title" data-i18n="drop.title">Drop a VRM file here</p>
+          <p class="drop-subtitle" data-i18n="drop.subtitle">The new viewer already supports VRM 0.x and VRM 1.0 loading.</p>
+        </div>
+        <div id="viewport" class="viewport"></div>
+      </section>
+
+      <nav class="menu-dock" aria-label="Main menu" data-i18n-aria-label="menu.main">
+        <ul class="menu-list">
+          <li><button class="menu-item" type="button" data-panel-target="emotion" data-i18n="panel.emotion">Emotion</button></li>
+          <li><button class="menu-item" type="button" data-panel-target="face" data-i18n="panel.face">Face</button></li>
+          <li><button class="menu-item" type="button" data-panel-target="pose" data-i18n="panel.pose">Pose</button></li>
+          <li><button class="menu-item" type="button" data-panel-target="model" data-i18n="panel.model">Model</button></li>
+          <li><button class="menu-item" type="button" data-panel-target="download" data-i18n="panel.download">Download</button></li>
+          <li><button class="menu-item" type="button" data-panel-target="option" data-i18n="panel.option">Option</button></li>
+        </ul>
+      </nav>
+    </main>
+  </div>
+
+  <script type="module" src="./assets/app.js"></script>
+</body>
+</html>
