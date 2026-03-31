@@ -1604,6 +1604,7 @@ function clearIdleAnimationState() {
 
   idleAnimationMixer?.stopAllAction?.();
   idleAnimationMixer = null;
+  syncHumanoidPoseState();
 }
 
 function clearInteractionAnimationState() {
@@ -1617,6 +1618,7 @@ function clearInteractionAnimationState() {
 
   interactionAnimationMixer?.stopAllAction?.();
   interactionAnimationMixer = null;
+  syncHumanoidPoseState();
 }
 
 function stopLegacyWaitingAnimation() {
@@ -1693,6 +1695,7 @@ function ensureLegacyWaitingAnimation() {
   idleAnimationAction.setEffectiveTimeScale(0.92);
   idleAnimationAction.play();
   idleAnimationMixer.update(0);
+  syncHumanoidPoseState();
   setVrmSceneVisibility(true);
 }
 
@@ -1770,6 +1773,7 @@ function startBundledIdleAnimationSequence(vrm, { introClip = null, waitingClip 
   }
 
   idleAnimationMixer.update(0);
+  syncHumanoidPoseState();
   setVrmSceneVisibility(true, vrm);
 
   return true;
@@ -2255,6 +2259,7 @@ async function triggerLikedInteraction(hitPoint, options = {}) {
     interactionAnimationAction.reset();
     interactionAnimationAction.play();
     interactionAnimationMixer.update(0);
+    syncHumanoidPoseState();
     setVrmSceneVisibility(true, vrm);
     console.log('[LIKED Debug] interaction animation started.');
   })().catch((error) => {
@@ -3013,8 +3018,14 @@ function syncHumanoidPoseState() {
   const shouldUseFallbackLookAt = Boolean(
     lookAtEnabled && eyeLookFallbackBones.length && activePoseTool !== 'bone' && !shouldUseNativeLookAt()
   );
+  const shouldKeepBundledAnimationSynchronized = Boolean(
+    idleAnimationIntroAction
+    || idleAnimationAction
+    || interactionAnimationAction
+  );
   const shouldAutoUpdateHumanBones = Boolean(
     shouldKeepLegacyPoseSynchronized
+    || shouldKeepBundledAnimationSynchronized
     || shouldUseFallbackLookAt
     || activePoseTool === 'bone'
   );
@@ -3027,6 +3038,7 @@ function syncHumanoidPoseState() {
   logPoseDebug('after-sync-humanoid-pose-state', {
     shouldAutoUpdateHumanBones,
     shouldKeepLegacyPoseSynchronized,
+    shouldKeepBundledAnimationSynchronized,
     shouldUseFallbackLookAt,
     selectedBuiltInPoseId: selectedBuiltInPose?.id ?? null,
     selectedBuiltInPoseMode: selectedBuiltInPoseSpec?.mode ?? null,
