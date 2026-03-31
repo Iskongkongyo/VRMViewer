@@ -6,6 +6,9 @@
 </p>
 ---
 
+![preview](./preview.png)
+
+------
 <h2 id="english">English</h2>
 
 A powerful, full-featured web-based 3D VRM model viewer with an integrated Node.js backend tailored for fetching and deobfuscating models directly from VRoid Hub.
