@@ -948,7 +948,6 @@ body.photo-capture .drop-copy {
   }
 
   .drop-copy {
-    width: calc(100vw - 28px);
-    bottom: 120px;
+    display: none;
   }
 }

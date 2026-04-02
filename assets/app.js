@@ -822,6 +822,7 @@ function createVrmLoader() {
 const vrmAnimationLoader = new GLTFLoader();
 vrmAnimationLoader.register((parser) => new VRMAnimationLoaderPlugin(parser));
 const bundledVrmAnimationSourceCache = new Map();
+const bundledVrmAnimationClipCache = new WeakMap();
 
 const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
@@ -1362,32 +1363,56 @@ function loadBundledVrmAnimationSource(kind) {
   return loadPromise;
 }
 
+function getBundledVrmAnimationClipCache(vrm) {
+  let clipCache = bundledVrmAnimationClipCache.get(vrm);
+  if (!clipCache) {
+    clipCache = new Map();
+    bundledVrmAnimationClipCache.set(vrm, clipCache);
+  }
+  return clipCache;
+}
+
 async function createBundledVrmAnimationClip(kind, vrm) {
   if (!vrm) {
     return null;
   }
 
-  const source = await loadBundledVrmAnimationSource(kind);
-  if (!source) {
-    return null;
+  const clipCache = getBundledVrmAnimationClipCache(vrm);
+  const cachedPromise = clipCache.get(kind);
+  if (cachedPromise) {
+    return cachedPromise;
   }
 
-  try {
-    const clip = createVRMAnimationClip(source.vrmAnimation, vrm);
-    clip.name = source.label.toLowerCase();
-    clip.userData = {
-      ...clip.userData,
-      hasExpressionTracks: Boolean(
-        source.vrmAnimation.expressionTracks?.preset?.size
-        || source.vrmAnimation.expressionTracks?.custom?.size
-      ),
-      hasLookAtTrack: Boolean(source.vrmAnimation.lookAtTrack),
-    };
-    return clip;
-  } catch (error) {
-    console.warn(`[VRMA] Failed to create ${source.label} clip for ${normalizeMeta(vrm).title}`, error);
-    return null;
+  const loadPromise = (async () => {
+    const source = await loadBundledVrmAnimationSource(kind);
+    if (!source) {
+      return null;
+    }
+
+    try {
+      const clip = createVRMAnimationClip(source.vrmAnimation, vrm);
+      clip.name = source.label.toLowerCase();
+      clip.userData = {
+        ...clip.userData,
+        hasExpressionTracks: Boolean(
+          source.vrmAnimation.expressionTracks?.preset?.size
+          || source.vrmAnimation.expressionTracks?.custom?.size
+        ),
+        hasLookAtTrack: Boolean(source.vrmAnimation.lookAtTrack),
+      };
+      return clip;
+    } catch (error) {
+      console.warn(`[VRMA] Failed to create ${source.label} clip for ${normalizeMeta(vrm).title}`, error);
+      return null;
+    }
+  })();
+
+  clipCache.set(kind, loadPromise);
+  const clip = await loadPromise;
+  if (!clip && clipCache.get(kind) === loadPromise) {
+    clipCache.delete(kind);
   }
+  return clip;
 }
 
 function getActiveBundledVrmAnimationClip() {
@@ -3824,6 +3849,7 @@ async function loadVrm(url, label, options = {}) {
     syncExpressionAvailability();
     applyExpressionState(0);
     setStatus(formatLoadedStatus(label, meta.title));
+    void createBundledVrmAnimationClip('liked', vrm);
 
     if (shouldPlayIntro) {
       void ensurePreferredWaitingAnimation({ playIntro: true, allowWaiting: shouldAllowWaitingAfterIntro });
