@@ -3048,6 +3048,11 @@ function syncHumanoidPoseState() {
     || idleAnimationAction
     || interactionAnimationAction
   );
+  const shouldMirrorRawPoseToNormalized = Boolean(
+    shouldKeepLegacyPoseSynchronized
+    || shouldKeepBundledAnimationSynchronized
+    || shouldUseFallbackLookAt
+  );
   const shouldAutoUpdateHumanBones = Boolean(
     shouldKeepLegacyPoseSynchronized
     || shouldKeepBundledAnimationSynchronized
@@ -3055,13 +3060,14 @@ function syncHumanoidPoseState() {
     || activePoseTool === 'bone'
   );
 
-  if (shouldAutoUpdateHumanBones && humanoid.getRawPose && humanoid.setNormalizedPose) {
+  if (shouldMirrorRawPoseToNormalized && humanoid.getRawPose && humanoid.setNormalizedPose) {
     humanoid.setNormalizedPose(humanoid.getRawPose());
   }
 
   humanoid.autoUpdateHumanBones = shouldAutoUpdateHumanBones;
   logPoseDebug('after-sync-humanoid-pose-state', {
     shouldAutoUpdateHumanBones,
+    shouldMirrorRawPoseToNormalized,
     shouldKeepLegacyPoseSynchronized,
     shouldKeepBundledAnimationSynchronized,
     shouldUseFallbackLookAt,
