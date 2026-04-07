@@ -21,7 +21,7 @@ const OUTPUT_DIR = path.join(__dirname, 'output');
 
 // 设置vrh-deobfuscator项目根目录
 // vrh-deobfuscator项目地址：https://github.com/uwu/vrh-deobfuscator
-const DEOBFUSCATOR_DIR = process.env.DEOBFUSCATOR_DIR || './vrh-deobfuscator';
+const DEOBFUSCATOR_DIR = process.env.DEOBFUSCATOR_DIR || 'D:/vrh-deobfuscator';
 const DEOBFUSCATOR_ENTRY = process.env.DEOBFUSCATOR_ENTRY || path.join(DEOBFUSCATOR_DIR, 'src', 'index.js');
 const NODE_BIN = process.env.NODE_BIN || process.execPath;
 
