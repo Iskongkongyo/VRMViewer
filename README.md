@@ -42,7 +42,6 @@ This project combines an advanced standalone web viewer (supporting facial expre
 - [**Three.js**](https://threejs.org/) — Provided the powerful, low-level WebGL 3D rendering capabilities
 - [**Express.js**](https://expressjs.com/) — Provided a lightweight yet efficient local Node-based proxy service
 - [**fukalimi**](https://hub.vroid.com/en/characters/5891851072799936000/models/9192682752022965309) — The author of the default VRM displayed in the project
-- [**神圣之光**](https://hub.vroid.com/en/users/20999653) - The author of the VRMA required for the project
 
 ---
 
@@ -78,4 +77,3 @@ This project combines an advanced standalone web viewer (supporting facial expre
 - [**Three.js**](https://threejs.org/) — 提供底层且强大的 WebGL 3D 渲染表现
 - [**Express.js**](https://expressjs.com/) — 提供轻量级而高效的本地 Node 接口代理服务
 - [**fukalimi**](https://hub.vroid.com/en/characters/5891851072799936000/models/9192682752022965309) - 项目默认展示的VRM的作者
-- [**神圣之光**](https://hub.vroid.com/en/users/20999653) - 项目所需VRMA的作者
