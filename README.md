@@ -16,12 +16,12 @@
   <a href="#english">English</a> •
   <a href="#简体中文">简体中文</a>
 </p>
+
 ---
 
 ![preview](./preview.png)
 
 ---
-
 
 ## 🧭 Contents / 目录
 
