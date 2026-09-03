@@ -1,0 +1,25 @@
+{
+  "name": "vroid-hub-deobfuscation-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "CLI and HTTP API for downloading and deobfuscating VRoid Hub preview models.",
+  "main": "index.js",
+  "packageManager": "pnpm@10.30.3",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "download": "node index.js",
+    "serve": "node index.js --server",
+    "start": "node index.js --server"
+  },
+  "dependencies": {
+    "@babylonjs/ktx2decoder": "^7.49.0",
+    "@gltf-transform/core": "^4.1.1",
+    "@gltf-transform/extensions": "^4.1.1",
+    "sharp": "^0.33.5",
+    "undici": "^7.22.0",
+    "webcrack-unpacker": "^1.0.2"
+  }
+}
